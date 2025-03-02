@@ -28,10 +28,6 @@ body {
   height: 100vh;
 }
 
-.hidden {
-  display: none;
-}
-
 /* Knapper */
 button {
   font-size: 1.5rem;
@@ -125,8 +121,17 @@ button {
   cursor: pointer;
 }
 
+#random-player-container.hidden #random-player-btn,
+#random-player-container.hidden #arrow {
+  display: none;
+}
+
 /* Highlight-effekt for den valgte spiller */
 .highlight {
   border: 5px solid yellow;
   box-shadow: 0px 0px 20px yellow;
+}
+
+.hidden {
+  display: none;
 }

@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startGameBtn.addEventListener("click", () => {
     startScreen.classList.add("hidden");
     playerSelection.classList.remove("hidden");
+    document.getElementById("random-player-container").classList.add("hidden");
   });
 
   // Vælg antal spillere
@@ -188,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const finalAngle = bestAngle + 360 * spins;
 
       // Spil spin-lyd med lav prioritet
-      soundManager.play("spin", 1);
+      //soundManager.play("spin", 1);
 
       // Animer pilen
       arrow.style.transition = "transform 3s ease-out";
@@ -199,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bestPlayer.classList.add("highlight");
 
         // Spil landings-lyd med høj prioritet, når pilen stopper på spilleren
-        soundManager.play("land", 10);
+        //soundManager.play("land", 10);
 
         // Fjern highlight efter 10 sekunder
         setTimeout(() => {
