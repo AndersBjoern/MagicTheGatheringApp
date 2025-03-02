@@ -2,11 +2,11 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open("static-cache").then((cache) => {
       return cache.addAll([
-        "./index.html",
-        "./css/styles.css",
-        "./js/script.js",
-        "./js/soundManager.js",
-        "./manifest.json",
+        "/MagicTheGatheringApp/index.html",
+        "/MagicTheGatheringApp/css/styles.css",
+        "/MagicTheGatheringApp/js/script.js",
+        "/MagicTheGatheringApp/js/soundManager.js",
+        "/MagicTheGatheringApp/manifest.json",
       ]);
     })
   );

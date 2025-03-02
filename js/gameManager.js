@@ -20,6 +20,13 @@ async function loadScreen(screenName) {
   }
 }
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/MagicTheGatheringApp/service-worker.js")
+    .then(() => console.log("✅ Service Worker registreret"))
+    .catch((err) => console.error("❌ Service Worker fejl:", err));
+}
+
 // Start med at loade startskærmen
 document.addEventListener("DOMContentLoaded", () => {
   loadScreen("startScreen");
