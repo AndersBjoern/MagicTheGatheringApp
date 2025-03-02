@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameBoard = document.getElementById("game-board");
   const startGameBtn = document.getElementById("start-game");
   const installButton = document.getElementById("install-button");
+  document.getElementById("random-player-container").classList.add("hidden");
 
   let deferredPrompt;
 
@@ -96,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupGame(numPlayers) {
     gameBoard.innerHTML = "";
     const colors = ["red", "blue", "green", "purple", "orange", "yellow"];
+    document
+      .getElementById("random-player-container")
+      .classList.remove("hidden");
 
     for (let i = 0; i < numPlayers; i++) {
       const playerDiv = document.createElement("div");
@@ -137,9 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const arrow = document.getElementById("arrow");
 
   // Afspil spin- og land-lyde via SoundManager
-  const soundManager = new SoundManager();
-  soundManager.loadSound("spin", "audio/spin-sound.mp3");
-  soundManager.loadSound("land", "audio/land-sound.mp3");
+  //const soundManager = new SoundManager();
+  //soundManager.loadSound("spin", "audio/spin-sound.mp3");
+  //soundManager.loadSound("land", "audio/land-sound.mp3");
 
   randomButton.addEventListener("click", () => {
     const players = document.getElementsByClassName("player");

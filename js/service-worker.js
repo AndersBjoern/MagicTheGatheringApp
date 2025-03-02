@@ -5,8 +5,8 @@ self.addEventListener("install", (event) => {
         "./index.html",
         "./css/styles.css",
         "./js/script.js",
-        "./assets/icon-192x192.png",
-        "./assets/icon-512x512.png",
+        "./js/soundManager.js",
+        "./manifest.json",
       ]);
     })
   );
