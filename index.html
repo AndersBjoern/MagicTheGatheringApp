@@ -1,10 +1,46 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="da">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Magic Life Counter</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="manifest" href="manifest.json" />
   </head>
   <body>
-    <h1>test</h1>
+    <button id="install-button" style="display: none">Installér appen</button>
+
+    <!-- Startside med PWA-installation -->
+    <div id="start-screen" class="screen">
+      <h1>Magic Life Counter</h1>
+      <button id="install-button" style="display: none">
+        Installér som app
+      </button>
+      <button id="start-game">Start spil</button>
+    </div>
+
+    <!-- Spillervalg -->
+    <div id="player-selection" class="screen hidden">
+      <h2>Vælg antal spillere</h2>
+      <div class="player-buttons">
+        <button class="player-count" data-players="2">2 spillere</button>
+        <button class="player-count" data-players="3">3 spillere</button>
+        <button class="player-count" data-players="4">4 spillere</button>
+        <button class="player-count" data-players="5">5 spillere</button>
+        <button class="player-count" data-players="6">6 spillere</button>
+      </div>
+    </div>
+
+    <!-- Spillepladen -->
+    <!-- Tilfældig spiller knap -->
+    <div id="random-player-container">
+      <div id="arrow"></div>
+      <button id="random-player-btn">🎲</button>
+    </div>
+
+    <div id="game-board" class="screen hidden"></div>
+
+    <script src="js/script.js"></script>
+    <script src="js/soundManager.js"></script>
   </body>
 </html>
