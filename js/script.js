@@ -69,12 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
   installButton.addEventListener("click", () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choice) => {
-        if (choice.outcome === "accepted") {
-          console.log("Appen blev installeret");
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("Brugeren installerede appen");
+        } else {
+          console.log("Brugeren afviste installationen");
         }
         deferredPrompt = null;
       });
+    } else {
+      console.log("beforeinstallprompt event blev aldrig udløst.");
     }
   });
 
