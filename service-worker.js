@@ -1,20 +1,21 @@
-self.addEventListener("install", (event) => {
+self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.open("static-cache").then((cache) => {
+    caches.open("magic-the-gathering-cache").then(function (cache) {
       return cache.addAll([
-        "/MagicTheGatheringApp/index.html",
-        "/MagicTheGatheringApp/css/styles.css",
-        "/MagicTheGatheringApp/js/script.js",
-        "/MagicTheGatheringApp/js/soundManager.js",
-        "/MagicTheGatheringApp/manifest.json",
+        "/",
+        "/index.html",
+        "/manifest.json",
+        "/icon.png",
+        "/icon-512.png",
+        // eventuelle andre statiske filer du har brug for
       ]);
     })
   );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", function (event) {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(function (response) {
       return response || fetch(event.request);
     })
   );

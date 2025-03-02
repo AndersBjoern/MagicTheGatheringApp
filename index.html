@@ -3,12 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Magic Life Counter</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="manifest" href="/MagicTheGatheringApp/manifest.json" />
-    <script type="module" src="js/gameManager.js"></script>
+    <title>Magic The Gathering App</title>
+
+    <!-- Manifest link -->
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Ikon til appen -->
+    <link rel="icon" href="icon.png" type="image/png" />
+
+    <!-- PWA tilføjelse -->
+    <meta name="theme-color" content="#4CAF50" />
   </head>
   <body>
-    <div id="app"></div>
+    <h1>Velkommen til Magic The Gathering App</h1>
+    <p>Brug denne app til at få adgang til din Magic The Gathering data!</p>
+
+    <script>
+      // For at tilføje PWA-funktionalitet
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .then(function (registration) {
+              console.log(
+                "Service Worker registreret med succes:",
+                registration
+              );
+            })
+            .catch(function (error) {
+              console.log(
+                "Service Worker kunne ikke blive registreret:",
+                error
+              );
+            });
+        });
+      }
+    </script>
   </body>
 </html>

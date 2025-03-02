@@ -1,19 +1,19 @@
 {
-  "name": "Magic App",
-  "short_name": "Magic",
-  "start_url": "/MagicTheGatheringApp/",
-  "scope": "/MagicTheGatheringApp/",
+  "name": "Magic The Gathering App",
+  "short_name": "MTG App",
+  "description": "En app til at få adgang til Magic The Gathering informationer.",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
   "icons": [
     {
-      "src": "./assets/mtg-icon.png",
+      "src": "icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./assets/mtg-icon.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
