@@ -1,137 +1,160 @@
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
-  overflow: hidden; /* Ingen scrolling */
-  touch-action: none; /* Bloker berøringshandlinger */
-  user-select: none; /* Ingen tekstmarkering */
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   position: fixed;
-  background-color: black;
 }
 
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: black;
-  color: white;
-  margin: 0;
-  overflow: hidden;
-}
-
-.screen {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background-color: #f5f5f5;
 }
 
-/* Knapper */
-button {
-  font-size: 1.5rem;
-  padding: 10px 20px;
+#startPage {
+  text-align: center;
+}
+
+#playerSelection button {
+  padding: 15px;
   margin: 10px;
+  font-size: 18px;
   cursor: pointer;
+  background-color: #4caf50;
+  color: white;
   border: none;
   border-radius: 5px;
-  background-color: white;
-  color: black;
+  transition: background-color 0.3s;
 }
 
-.player-buttons button {
-  display: block;
-  width: 200px;
+#playerSelection button:hover {
+  background-color: #45a049;
 }
 
-/* Grid til spillere */
-#game-board {
-  display: grid;
-  grid-gap: 10px;
-  padding: 20px;
+#gameBoard {
   width: 100vw;
   height: 100vh;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-
-/* Spiller-cellestil */
-.player {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  user-select: none;
 }
 
-.player .half {
-  flex: 1;
+#gridContainer {
+  display: grid;
+  gap: 10px;
+  width: 100%;
   height: 100%;
 }
 
-.left {
-  background-color: rgba(255, 0, 0, 0.5);
-}
-
-.right {
-  background-color: rgba(0, 255, 0, 0.5);
-}
-
-/* Container til den centrale knap */
-#random-player-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.gridCell {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 80px;
+  background-color: #e0e0e0;
+  border: 2px solid #333;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Pil der drejer */
-#arrow {
+.number {
   position: absolute;
-  width: 60px;
-  height: 10px;
-  background-color: white;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-  transform-origin: bottom center; /* Sørger for at rotere korrekt */
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%) rotate(0deg);
-  transition: transform 3s ease-out;
+  z-index: 0;
+  font-size: 30px;
 }
 
-/* Selve knappen */
-#random-player-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid white;
-  font-size: 1.5rem;
-  background-color: black;
+.cornerText {
+  position: absolute;
+  font-size: 14px;
   color: white;
+  font-weight: normal;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  bottom: 0;
+  height: 100%;
+  z-index: 1;
+}
+
+.button {
+  flex: 1;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s;
   cursor: pointer;
 }
 
-#random-player-container.hidden #random-player-btn,
-#random-player-container.hidden #arrow {
-  display: none;
+.button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
-/* Highlight-effekt for den valgte spiller */
-.highlight {
-  border: 5px solid yellow;
-  box-shadow: 0px 0px 20px yellow;
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-.hidden {
-  display: none;
+#navbar button {
+  padding: 10px 20px;
+  background-color: #444;
+  border: none;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+#navbar button:hover {
+  background-color: #555;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-top: 50px;
+}
+
+#content {
+  flex-grow: 1;
+  overflow: hidden;
+  padding: 20px;
+  text-align: center;
+  height: calc(100% - 50px);
+  background-color: #f4f4f4;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

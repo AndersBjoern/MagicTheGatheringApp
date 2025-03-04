@@ -1,38 +1,40 @@
-// gameManager.js - Håndterer navigation mellem sider
-const app = document.getElementById("app");
+import { soundManager } from "./soundManager.js";
 
-// Funktion til at loade HTML og tilhørende JS dynamisk
-async function loadScreen(screenName) {
-  try {
-    // Hent HTML-filen for skærmen
-    const response = await fetch(`./js/${screenName}.html`);
-    const html = await response.text();
-    app.innerHTML = html; // Indsæt HTML i #app
+export const gameManager = {
+  loadPage: async function (page, playerCount = null) {
+    const contentDiv = document.getElementById("content");
+    contentDiv.style.opacity = 0;
 
-    // Indlæs det tilhørende script
-    const script = document.createElement("script");
-    script.src = `./js/${screenName}.js`;
-    script.type = "module";
-    script.defer = true;
-    document.body.appendChild(script);
-  } catch (error) {
-    console.error("Fejl ved indlæsning af skærm:", error);
-  }
-}
+    try {
+      const response = await fetch(`html/${page}.html`);
+      if (!response.ok) {
+        throw new Error(`HTTP-fejl! Status: ${response.status}`);
+      }
+      const html = await response.text();
+      contentDiv.innerHTML = html;
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/MagicTheGatheringApp/service-worker.js")
-    .then(() => console.log("✅ Service Worker registreret"))
-    .catch((err) => console.error("❌ Service Worker fejl:", err));
-}
+      // Afspil lyd ved skift af side
+      //soundManager.playSound("background.mp3");
 
-// Start med at loade startskærmen
-document.addEventListener("DOMContentLoaded", () => {
-  loadScreen("startScreen");
-});
+      if (page === "game") {
+        import("./game.js")
+          .then((module) => {
+            if (module.createGameboard) {
+              module.createGameboard(playerCount);
+            } else {
+              console.error("Fejl: createGameboard findes ikke i game.js");
+            }
+          })
+          .catch((error) => {
+            console.error("Fejl ved dynamisk import af game.js:", error);
+          });
+      }
+    } catch (error) {
+      console.error("Fejl ved indlæsning af side:", error);
+    }
 
-// Funktion til at skifte skærm
-export function navigateTo(screen) {
-  loadScreen(screen);
-}
+    setTimeout(() => {
+      contentDiv.style.opacity = 1;
+    }, 300);
+  },
+};
