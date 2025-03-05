@@ -25,36 +25,9 @@ body {
 }
 
 @media (orientation: portrait) {
-  #gameBoard {
-    width: 100vw;
-    height: 100vh;
-  }
-
-  .gridCell {
-    width: 50vw;
-    height: 50vh;
-    transform: rotate(0deg); /* For initial rotation to fit portrait */
-  }
 }
 
 @media (orientation: landscape) {
-  body {
-    transform: rotate(
-      90deg
-    ); /* Lås kroppen til portræt, selv når skærmen er landskab */
-    transform-origin: center center;
-    height: 100vh;
-    width: 100vw;
-  }
-  /* Sørg for at hele layoutet følger portrætretningen */
-  #gameBoard,
-  #gridContainer,
-  .gridCell {
-    transform: rotate(-90deg);
-    transform-origin: center center;
-    width: 100vh; /* Brug højde som bredde når roteret */
-    height: 100vw; /* Brug bredde som højde når roteret */
-  }
 }
 
 #startPage {
@@ -75,82 +48,6 @@ body {
 
 #playerSelection button:hover {
   background-color: #45a049;
-}
-
-#gameBoard {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Styling af grid-container */
-#gridContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  gap: 5px;
-}
-
-/* Cellerne (spillerens felt) */
-.gridCell {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  border-radius: 10px;
-}
-
-/* Spillerens navn */
-.player-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* Tal i midten af cellen */
-.number {
-  position: absolute;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-/* Originalt tal i hjørnet */
-.original-value {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  opacity: 0.5;
-  z-index: 1;
-}
-
-/* Knap-container */
-.button-container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-}
-
-/* Knapper */
-.button {
-  flex: 1;
-  display: flex;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  font-weight: bold;
-  text-align: center;
-}
-
-.button:hover {
-  background-color: #dddddd46;
 }
 
 #navbar {
@@ -188,44 +85,68 @@ body {
   padding-top: 50px;
 }
 
-#content {
-  flex-grow: 1;
-  overflow: hidden;
+#gameBoard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 96vh;
+  width: 100vw;
+}
+#gridContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(6, auto);
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+.grid-item {
+  background-color: lightblue;
   padding: 20px;
   text-align: center;
-  height: calc(100% - 50px);
-  background-color: #f4f4f4;
-  transition: opacity 0.3s ease;
+  border: 1px solid #000;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
-/* Media query to handle rotations */
-@media (orientation: portrait) {
-  #gridContainer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    height: 100vh;
-  }
-
-  .gridCell {
-    width: 50vw;
-    height: 50vh;
-  }
+.inner-text {
+  display: inline-block;
+  white-space: nowrap;
+  transform-origin: center;
 }
 
-@media (orientation: landscape) {
-  #gridContainer {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    height: 100vh;
-  }
+.rotate-90 {
+  transform: rotate(90deg);
+}
 
-  .gridCell {
-    width: 25vw;
-    height: 50vh;
-  }
+.rotate--90 {
+  transform: rotate(-90deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.player1 {
+  background-color: lightcoral;
+}
+.player2 {
+  background-color: lightgreen;
+}
+.player3 {
+  background-color: lightgoldenrodyellow;
+}
+.player4 {
+  background-color: lightgray;
+}
+.player5 {
+  background-color: lightblue;
+}
+.player6 {
+  background-color: lightpink;
 }
