@@ -1,80 +1,184 @@
+export function changeNumber(numberElement, delta, cell) {
+  const originalValueDiv = cell.querySelector(".original-value");
+
+  let currentNumber = parseInt(numberElement.textContent);
+  const oldNumber = currentNumber;
+
+  currentNumber += delta;
+  numberElement.textContent = currentNumber;
+
+  originalValueDiv.textContent = oldNumber;
+
+  resetTimer(cell);
+}
+
+export function resetTimer(cell) {
+  const originalValueDiv = cell.querySelector(".original-value");
+
+  if (cell.timer) {
+    clearTimeout(cell.timer);
+  }
+
+  cell.timer = setTimeout(() => {
+    originalValueDiv.textContent = "";
+  }, 10000);
+}
+
 export function createGameboard(playerCount) {
-  function changeNumber(numberElement, delta, cell) {
-    let currentNumber = parseInt(numberElement.textContent);
-    currentNumber += delta;
-    numberElement.textContent = currentNumber;
-    resetTimer(cell);
+  const boardContainer = document.getElementById("gridContainer");
+  boardContainer.innerHTML = "";
+  boardContainer.style.gridTemplateColumns = "1fr 1fr";
+
+  if (playerCount === 2) {
+    boardContainer.style.gridTemplateColumns = "1fr";
+    boardContainer.style.gridTemplateRows = "1fr 1fr";
+    boardContainer.innerHTML = `
+        <div class="grid-item player1">${addInnerContent(
+          "P1",
+          "rotate-180"
+        )}</div>
+      <div class="grid-item player2">${addInnerContent("P2", "")}</div>
+    `;
   }
 
-  function resetTimer(cell) {
-    const timerDiv = cell.querySelector(".timer");
-    const originalValueDiv = cell.querySelector(".original-value");
-
-    if (timerDiv?.timer) {
-      clearTimeout(timerDiv.timer);
-    }
-
-    timerDiv.timer = setTimeout(() => {
-      originalValueDiv.textContent = "";
-    }, 60000);
+  if (playerCount === 3) {
+    boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
+    boardContainer.innerHTML = `
+        <div class="grid-item player1" style="grid-row: span 2;">${addInnerContent(
+          "P1",
+          "rotate-90"
+        )}</div>
+      <div class="grid-item player2" style="grid-row: span 2;">${addInnerContent(
+        "P2",
+        "rotate--90"
+      )}</div>
+      <div class="grid-item player3" style="grid-column: span 2;">${addInnerContent(
+        "P3",
+        ""
+      )}</div>
+    `;
   }
 
-  function generateBoard(playerCount) {
-    const boardContainer = document.getElementById("gridContainer");
-    boardContainer.innerHTML = "";
-    boardContainer.style.gridTemplateColumns = "1fr 1fr"; // Default 2 columns
-
-    if (playerCount === 2) {
-      boardContainer.style.gridTemplateRows = "1fr 1fr";
-      boardContainer.innerHTML = `
-        <div class="grid-item player1"><div class="inner-text rotate-180">P1</div></div>
-        <div class="grid-item player2"><div class="inner-text">P2</div></div>
-      `;
-    }
-
-    if (playerCount === 3) {
-      boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
-      boardContainer.innerHTML = `
-        <div class="grid-item player1" style="grid-row: span 2;"><div class="inner-text rotate-90">P1</div></div>
-        <div class="grid-item player2" style="grid-row: span 2;"><div class="inner-text rotate--90">P2</div></div>
-        <div class="grid-item player3" style="grid-column: span 2;"><div class="inner-text">P3</div></div>
-      `;
-    }
-
-    if (playerCount === 4) {
-      boardContainer.style.gridTemplateRows = "1fr 1fr";
-      boardContainer.innerHTML = `
-        <div class="grid-item player1"><div class="inner-text rotate-90">P1</div></div>
-        <div class="grid-item player2"><div class="inner-text rotate--90">P2</div></div>
-        <div class="grid-item player3"><div class="inner-text rotate-90">P3</div></div>
-        <div class="grid-item player4"><div class="inner-text rotate--90">P4</div></div>
-      `;
-    }
-
-    if (playerCount === 5) {
-      boardContainer.style.gridTemplateColumns = "1fr 1fr";
-      boardContainer.style.gridTemplateRows = "1.5fr 1.5fr 1fr";
-      boardContainer.innerHTML = `
-        <div class="grid-item player1"><div class="inner-text rotate-90">P1</div></div>
-        <div class="grid-item player2"><div class="inner-text rotate--90">P2</div></div>
-        <div class="grid-item player3"><div class="inner-text rotate-90">P3</div></div>
-        <div class="grid-item player4"><div class="inner-text rotate--90">P4</div></div>
-        <div class="grid-item player5" style="grid-column: span 2; grid-row: span 2;"><div class="inner-text">P5</div></div>
-      `;
-    }
-
-    if (playerCount === 6) {
-      boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
-      boardContainer.innerHTML = `
-        <div class="grid-item player1"><div class="inner-text rotate-90">P1</div></div>
-        <div class="grid-item player2"><div class="inner-text rotate--90">P2</div></div>
-        <div class="grid-item player3"><div class="inner-text rotate-90">P3</div></div>
-        <div class="grid-item player4"><div class="inner-text rotate--90">P4</div></div>
-        <div class="grid-item player5"><div class="inner-text rotate-90">P5</div></div>
-        <div class="grid-item player6"><div class="inner-text rotate--90">P6</div></div>
-      `;
-    }
+  if (playerCount === 4) {
+    boardContainer.style.gridTemplateRows = "1fr 1fr";
+    boardContainer.innerHTML = `
+        <div class="grid-item player1">${addInnerContent(
+          "P1",
+          "rotate-90"
+        )}</div>
+      <div class="grid-item player2">${addInnerContent(
+        "P2",
+        "rotate--90"
+      )}</div>
+      <div class="grid-item player3">${addInnerContent("P3", "rotate-90")}</div>
+      <div class="grid-item player4">${addInnerContent(
+        "P4",
+        "rotate--90"
+      )}</div>
+    `;
   }
 
-  generateBoard(playerCount);
+  if (playerCount === 5) {
+    boardContainer.style.gridTemplateColumns = "1fr 1fr";
+    boardContainer.style.gridTemplateRows = "1.5fr 1.5fr 1fr";
+    boardContainer.innerHTML = `
+        <div class="grid-item player1">${addInnerContent(
+          "P1",
+          "rotate-90"
+        )}</div>
+      <div class="grid-item player2">${addInnerContent(
+        "P2",
+        "rotate--90"
+      )}</div>
+      <div class="grid-item player3">${addInnerContent("P3", "rotate-90")}</div>
+      <div class="grid-item player4">${addInnerContent(
+        "P4",
+        "rotate--90"
+      )}</div>
+      <div class="grid-item player5" style="grid-column: span 2; grid-row: span 2;">${addInnerContent(
+        "P5",
+        ""
+      )}</div>
+    `;
+  }
+
+  if (playerCount === 6) {
+    boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
+    boardContainer.innerHTML = `
+        <div class="grid-item player1">${addInnerContent(
+          "P1",
+          "rotate-90"
+        )}</div>
+        <div class="grid-item player2">${addInnerContent(
+          "P2",
+          "rotate--90"
+        )}</div>
+        <div class="grid-item player3">${addInnerContent(
+          "P3",
+          "rotate-90"
+        )}</div>
+        <div class="grid-item player4">${addInnerContent(
+          "P4",
+          "rotate--90"
+        )}</div>
+        <div class="grid-item player5">${addInnerContent(
+          "P5",
+          "rotate-90"
+        )}</div>
+        <div class="grid-item player6">${addInnerContent(
+          "P6",
+          "rotate--90"
+        )}</div>
+      `;
+  }
+
+  document.querySelectorAll(".grid-item").forEach((cell) => {
+    const numberElement = cell.querySelector(".number-display");
+    const leftButton = cell.querySelector(".left-button");
+    const rightButton = cell.querySelector(".right-button");
+
+    leftButton.addEventListener("click", () =>
+      changeNumber(numberElement, -1, cell)
+    );
+    rightButton.addEventListener("click", () =>
+      changeNumber(numberElement, 1, cell)
+    );
+  });
+}
+
+export function adjustContentWrapperSize() {
+  document.querySelectorAll(".grid-item").forEach((gridItem) => {
+    const contentWrapper = gridItem.querySelector(".content-wrapper");
+
+    if (!contentWrapper) return;
+
+    const isRotated =
+      contentWrapper.classList.contains("rotate-90") ||
+      contentWrapper.classList.contains("rotate--90") ||
+      contentWrapper.classList.contains("rotate-180");
+
+    if (isRotated) {
+      const parentWidth = gridItem.offsetWidth;
+      const parentHeight = gridItem.offsetHeight;
+      contentWrapper.style.width = `${parentHeight}px`;
+      contentWrapper.style.height = `${parentWidth}px`;
+    }
+  });
+}
+
+// Kør funktionen efter at DOM er ændret
+window.addEventListener("resize", adjustContentWrapperSize);
+
+function addInnerContent(playerName, rotationClass) {
+  return `
+    <div class="content-wrapper ${rotationClass}">
+      <div class="original-value"></div>
+      <div class="inner-text">${playerName}</div>
+      <div class="number-display">40</div>
+      <div class="button-container">
+        <div class="left-button">-</div>
+        <div class="right-button">+</div>
+      </div>
+    </div>
+  `;
 }
