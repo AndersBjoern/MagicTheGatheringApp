@@ -2,42 +2,53 @@
 <html lang="da">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Magic The Gathering App</title>
-
-    <!-- Manifest link -->
-    <link rel="manifest" href="manifest.json" />
-
-    <!-- Ikon til appen -->
-    <link rel="icon" href="icon.png" type="image/png" />
-
-    <!-- PWA tilføjelse -->
-    <meta name="theme-color" content="#4CAF50" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <title>Modulær App</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <h1>Velkommen til Magic The Gathering App</h1>
-    <p>Brug denne app til at få adgang til din Magic The Gathering data!</p>
+    <div id="wrapper">
+      <!-- Menu-knap -->
+      <button id="menu-toggle" onclick="toggleNavbar()">☰</button>
 
-    <script>
-      // For at tilføje PWA-funktionalitet
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          navigator.serviceWorker
-            .register("/service-worker.js")
-            .then(function (registration) {
-              console.log(
-                "Service Worker registreret med succes:",
-                registration
-              );
-            })
-            .catch(function (error) {
-              console.log(
-                "Service Worker kunne ikke blive registreret:",
-                error
-              );
-            });
-        });
-      }
+      <!-- Navbar -->
+      <nav id="navbar">
+        <button onclick="navigateTo('home')">Home</button>
+        <button onclick="navigateTo('game')">Game</button>
+      </nav>
+
+      <div id="content"></div>
+    </div>
+
+    <script type="module">
+      import { gameManager } from "./js/gameManager.js";
+
+      window.navigateTo = function (page) {
+        gameManager.loadPage(page);
+      };
+
+      window.startGame = function (playerCount) {
+        gameManager.loadPage("game", playerCount);
+      };
+
+      window.toggleNavbar = function () {
+        const navbar = document.getElementById("navbar");
+        const menuToggle = document.getElementById("menu-toggle");
+
+        navbar.classList.toggle("active");
+
+        if (navbar.classList.contains("active")) {
+          menuToggle.textContent = "✖";
+        } else {
+          menuToggle.textContent = "☰";
+        }
+      };
+
+      gameManager.loadPage("home");
     </script>
   </body>
 </html>
