@@ -26,6 +26,8 @@ export function changeNumber(numberElement, delta, cell) {
       console.log(cell.decreaseCount);
       soundManager.playSound("point-drop");
     }
+  } else {
+    soundManager.playSound("pot-of-greed");
   }
 
   if (!originalValueDiv.textContent) {

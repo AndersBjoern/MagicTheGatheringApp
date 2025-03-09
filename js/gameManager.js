@@ -32,6 +32,15 @@ export const gameManager = {
           .catch((error) => {
             console.error("Fejl ved dynamisk import af game.js:", error);
           });
+      } else if (page === "home") {
+        this.gameModule = null;
+        import("./home.js")
+          .then(() => {
+            console.log("home.js er indlæst");
+          })
+          .catch((error) => {
+            console.error("Fejl ved dynamisk import af home.js:", error);
+          });
       } else {
         this.gameModule = null;
       }
@@ -66,14 +75,8 @@ export const gameManager = {
       document
         .getElementById("select-player-button")
         .addEventListener("click", () => this.selectPlayer());
-    } else if (page === "home") {
-      import("./home.js")
-        .then(() => {
-          console.log("home.js er indlæst");
-        })
-        .catch((error) => {
-          console.error("Fejl ved dynamisk import af home.js:", error);
-        });
+    } else {
+      extraButtons.innerHTML = "";
     }
   },
 

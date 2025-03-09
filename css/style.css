@@ -236,6 +236,11 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.left-button:active,
+.right-button:active {
+  background: none;
+}
+
 .rotate-90 {
   transform: rotate(90deg);
 }
