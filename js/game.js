@@ -166,7 +166,6 @@ export function adjustContentWrapperSize() {
   });
 }
 
-// Kør funktionen efter at DOM er ændret
 window.addEventListener("resize", adjustContentWrapperSize);
 
 function addInnerContent(playerName, rotationClass) {

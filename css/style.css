@@ -77,14 +77,6 @@ body {
   background-color: #555;
 }
 
-#wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  padding-top: 50px;
-}
-
 #gameBoard {
   display: flex;
   flex-direction: column;
@@ -112,7 +104,6 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
 .rotate-90 {
@@ -151,14 +142,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-}
-
-.original-value {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: transparent;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .inner-text {
