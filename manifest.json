@@ -2,7 +2,7 @@
   "name": "Magic The Gathering App",
   "short_name": "MTG App",
   "description": "A modular Magic the Gathering app",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
