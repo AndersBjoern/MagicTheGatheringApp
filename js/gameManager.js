@@ -66,8 +66,14 @@ export const gameManager = {
       document
         .getElementById("select-player-button")
         .addEventListener("click", () => this.selectPlayer());
-    } else {
-      extraButtons.innerHTML = "";
+    } else if (page === "home") {
+      import("./home.js")
+        .then(() => {
+          console.log("home.js er indlæst");
+        })
+        .catch((error) => {
+          console.error("Fejl ved dynamisk import af home.js:", error);
+        });
     }
   },
 

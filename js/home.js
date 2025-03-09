@@ -1,8 +1,7 @@
 if ("serviceWorker" in navigator) {
-  console.log("Service Worker er understøttet");
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/service-worker.js")
+      .register("./service-worker.js", { scope: "./" })
       .then((registration) => {
         console.log("Service Worker registreret med succes:", registration);
       })
