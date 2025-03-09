@@ -7,11 +7,15 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0"
     />
     <title>Modulær App</title>
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div id="wrapper">
+      <!-- Menu-knap -->
+      <button id="menu-toggle" onclick="toggleNavbar()">☰</button>
+
+      <!-- Navbar -->
       <nav id="navbar">
         <button onclick="navigateTo('home')">Home</button>
         <button onclick="navigateTo('game')">Game</button>
@@ -23,17 +27,27 @@
     <script type="module">
       import { gameManager } from "./js/gameManager.js";
 
-      // Gør navigateTo tilgængelig globalt
       window.navigateTo = function (page) {
         gameManager.loadPage(page);
       };
 
-      // Gør startGame tilgængelig globalt
       window.startGame = function (playerCount) {
         gameManager.loadPage("game", playerCount);
       };
 
-      // Indlæs home som startside
+      window.toggleNavbar = function () {
+        const navbar = document.getElementById("navbar");
+        const menuToggle = document.getElementById("menu-toggle");
+
+        navbar.classList.toggle("active");
+
+        if (navbar.classList.contains("active")) {
+          menuToggle.textContent = "✖";
+        } else {
+          menuToggle.textContent = "☰";
+        }
+      };
+
       gameManager.loadPage("home");
     </script>
   </body>

@@ -1,7 +1,11 @@
-import { soundManager } from "./soundManager.js";
-
 export const gameManager = {
+  currentPage: null,
+  numberOfPlayers: 0,
+  gameModule: null,
   loadPage: async function (page, playerCount = null) {
+    this.currentPage = page;
+    this.numberOfPlayers = playerCount;
+
     const contentDiv = document.getElementById("content");
     contentDiv.style.opacity = 0;
 
@@ -13,12 +17,12 @@ export const gameManager = {
       const html = await response.text();
       contentDiv.innerHTML = html;
 
-      // Afspil lyd ved skift af side
-      //soundManager.playSound("background.mp3");
+      this.updateNavbar(page);
 
       if (page === "game") {
         import("./game.js")
           .then((module) => {
+            this.gameModule = module;
             if (module.createGameboard) {
               module.createGameboard(playerCount);
             } else {
@@ -28,6 +32,8 @@ export const gameManager = {
           .catch((error) => {
             console.error("Fejl ved dynamisk import af game.js:", error);
           });
+      } else {
+        this.gameModule = null;
       }
     } catch (error) {
       console.error("Fejl ved indlæsning af side:", error);
@@ -36,5 +42,39 @@ export const gameManager = {
     setTimeout(() => {
       contentDiv.style.opacity = 1;
     }, 300);
+  },
+
+  updateNavbar: function (page) {
+    const navbar = document.getElementById("navbar");
+    let extraButtons = document.getElementById("extra-buttons");
+
+    if (!extraButtons) {
+      extraButtons = document.createElement("div");
+      extraButtons.id = "extra-buttons";
+      navbar.appendChild(extraButtons);
+    }
+
+    if (page === "game") {
+      extraButtons.innerHTML = `
+        <button id="restart-game-button">Genstart spil</button>
+        <button id="select-player-button" class="highlight-button">Vælg spiller</button>
+      `;
+
+      document
+        .getElementById("restart-game-button")
+        .addEventListener("click", () => this.restartGame());
+      document
+        .getElementById("select-player-button")
+        .addEventListener("click", () => this.selectPlayer());
+    } else {
+      extraButtons.innerHTML = "";
+    }
+  },
+
+  restartGame: function () {
+    this.loadPage("game", this.numberOfPlayers);
+  },
+  selectPlayer: function () {
+    this.gameModule.randomPlayer();
   },
 };

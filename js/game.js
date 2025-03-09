@@ -1,13 +1,37 @@
+import { soundManager } from "../js/soundManager.js";
+
 export function changeNumber(numberElement, delta, cell) {
   const originalValueDiv = cell.querySelector(".original-value");
 
   let currentNumber = parseInt(numberElement.textContent);
+  if (isNaN(currentNumber)) {
+    currentNumber = 0;
+  }
   const oldNumber = currentNumber;
 
   currentNumber += delta;
   numberElement.textContent = currentNumber;
 
-  originalValueDiv.textContent = oldNumber;
+  if (currentNumber < oldNumber) {
+    if (!cell.decreaseCount) {
+      cell.decreaseCount = 0;
+    }
+
+    cell.decreaseCount++;
+
+    if (cell.decreaseCount >= 5) {
+      soundManager.playSound("minecraft_hurt");
+      cell.decreaseCount = 0;
+    } else {
+      console.log(cell.decreaseCount);
+      soundManager.playSound("point-drop");
+    }
+  }
+
+  if (!originalValueDiv.textContent) {
+    originalValueDiv.textContent = oldNumber;
+    originalValueDiv.style.opacity = "1";
+  }
 
   resetTimer(cell);
 }
@@ -21,7 +45,9 @@ export function resetTimer(cell) {
 
   cell.timer = setTimeout(() => {
     originalValueDiv.textContent = "";
-  }, 10000);
+    originalValueDiv.style.opacity = "0";
+    cell.decreaseCount = 0;
+  }, 20000);
 }
 
 export function createGameboard(playerCount) {
@@ -144,6 +170,9 @@ export function createGameboard(playerCount) {
       changeNumber(numberElement, 1, cell)
     );
   });
+
+  adjustContentWrapperSize();
+  window.addEventListener("resize", adjustContentWrapperSize);
 }
 
 export function adjustContentWrapperSize() {
@@ -154,24 +183,24 @@ export function adjustContentWrapperSize() {
 
     const isRotated =
       contentWrapper.classList.contains("rotate-90") ||
-      contentWrapper.classList.contains("rotate--90") ||
-      contentWrapper.classList.contains("rotate-180");
+      contentWrapper.classList.contains("rotate--90");
 
     if (isRotated) {
       const parentWidth = gridItem.offsetWidth;
       const parentHeight = gridItem.offsetHeight;
       contentWrapper.style.width = `${parentHeight}px`;
       contentWrapper.style.height = `${parentWidth}px`;
+    } else {
+      contentWrapper.style.width = "100%";
+      contentWrapper.style.height = "100%";
     }
   });
 }
 
-window.addEventListener("resize", adjustContentWrapperSize);
-
 function addInnerContent(playerName, rotationClass) {
   return `
     <div class="content-wrapper ${rotationClass}">
-      <div class="original-value"></div>
+      <div class="original-value"></div> <!-- Viser gammel værdi i 1 minut -->
       <div class="inner-text">${playerName}</div>
       <div class="number-display">40</div>
       <div class="button-container">
@@ -180,4 +209,16 @@ function addInnerContent(playerName, rotationClass) {
       </div>
     </div>
   `;
+}
+
+export function randomPlayer() {
+  const gridItems = document.querySelectorAll(".grid-item");
+  const randomIndex = Math.floor(Math.random() * gridItems.length);
+  const randomGridItem = gridItems[randomIndex];
+
+  randomGridItem.classList.add("celebration");
+
+  setTimeout(() => {
+    randomGridItem.classList.remove("celebration");
+  }, 2000);
 }
