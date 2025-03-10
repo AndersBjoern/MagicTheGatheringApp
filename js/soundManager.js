@@ -5,7 +5,6 @@ class SoundManager {
   }
 
   playSound(soundFile) {
-    console.log(soundFile);
     if (this.currentlyPlaying && this.currentlyPlaying !== soundFile) {
       this.sounds[this.currentlyPlaying].pause();
       this.sounds[this.currentlyPlaying].currentTime = 0;

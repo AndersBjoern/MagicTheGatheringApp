@@ -35,9 +35,7 @@ export const gameManager = {
       } else if (page === "home") {
         this.gameModule = null;
         import("./home.js")
-          .then(() => {
-            console.log("home.js er indlæst");
-          })
+          .then(() => {})
           .catch((error) => {
             console.error("Fejl ved dynamisk import af home.js:", error);
           });
