@@ -12,6 +12,11 @@ export function changeNumber(numberElement, delta, cell) {
   currentNumber += delta;
   numberElement.textContent = currentNumber;
 
+  if (!originalValueDiv.textContent) {
+    originalValueDiv.textContent = oldNumber;
+    originalValueDiv.style.opacity = "1";
+  }
+
   function playSoundEffects(currentNumber, oldNumber, cell) {
     if (currentNumber < oldNumber) {
       if (!cell.decreaseCount) {
@@ -36,13 +41,15 @@ export function changeNumber(numberElement, delta, cell) {
     setHeartBeatSpeed(value, heartIcon);
     const fontSize = calculateFontSize(value);
     heartIcon.style.fontSize = fontSize;
+    setHeartDarkness(value, heartIcon);
+    updateHeartIcon(value, heartIcon);
   }
 
   function calculateFontSize(value) {
     const minValue = 9;
     const maxValue = 40;
-    const minFontSize = 2;
-    const maxFontSize = 5;
+    const minFontSize = 3.5;
+    const maxFontSize = 7;
 
     if (value >= maxValue) return `${maxFontSize}em`;
     if (value <= minValue) return `${minFontSize}em`;
@@ -56,11 +63,16 @@ export function changeNumber(numberElement, delta, cell) {
     return `${fontSize}em`;
   }
 
-  function setHeartBeatSpeed(value, heartElement) {
+  function setHeartBeatSpeed(value, heartIcon) {
     const minValue = 10;
     const maxValue = 40;
     const minDuration = 2;
     const maxDuration = 0.5;
+
+    if (value <= 0) {
+      heartIcon.style.animation = "none";
+      return;
+    }
 
     if (value >= maxValue) value = maxValue;
     if (value <= minValue) value = minValue;
@@ -71,19 +83,37 @@ export function changeNumber(numberElement, delta, cell) {
 
     duration = parseFloat(duration.toFixed(2));
 
-    heartElement.style.animationDuration = `${duration}s`;
+    heartIcon.style.animationDuration = `${duration}s`;
+  }
+
+  function setHeartDarkness(value, heartIcon) {
+    const minValue = 10;
+    const maxValue = 40;
+    const minGrayscale = 100;
+    const maxGrayscale = 0;
+
+    if (value >= maxValue) value = maxValue;
+    if (value <= minValue) value = minValue;
+
+    let percentage = (value - minValue) / (maxValue - minValue);
+    let grayscale = minGrayscale - percentage * minGrayscale;
+
+    heartIcon.style.filter = `grayscale(${grayscale}%)`;
+  }
+
+  function updateHeartIcon(value, heartIcon) {
+    if (value <= 0) {
+      heartIcon.innerHTML = "💔";
+    } else {
+      heartIcon.innerHTML = "❤️";
+    }
   }
 
   function styleGridItem() {
     console.log("styleGridItem");
   }
 
-  function handlePolishEffects(
-    currentNumber,
-    oldNumber,
-    cell,
-    originalValueDiv
-  ) {
+  function handlePolishEffects(currentNumber, oldNumber, cell) {
     playSoundEffects(currentNumber, oldNumber, cell);
     styleHeart(cell, currentNumber);
     styleGridItem(cell);
