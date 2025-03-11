@@ -48,11 +48,11 @@ export function changeNumber(numberElement, delta, cell) {
   function calculateFontSize(value) {
     const minValue = 9;
     const maxValue = 40;
-    const minFontSize = 3.5;
-    const maxFontSize = 7;
+    const minFontSize = 15;
+    const maxFontSize = 30;
 
-    if (value >= maxValue) return `${maxFontSize}em`;
-    if (value <= minValue) return `${minFontSize}em`;
+    if (value >= maxValue) return `${maxFontSize}vw`;
+    if (value <= minValue) return `${minFontSize}vw`;
 
     let percentage = (value - minValue) / (maxValue - minValue);
 
@@ -60,7 +60,7 @@ export function changeNumber(numberElement, delta, cell) {
 
     fontSize = Math.ceil(fontSize * 10) / 10;
 
-    return `${fontSize}em`;
+    return `${fontSize}vw`;
   }
 
   function setHeartBeatSpeed(value, heartIcon) {
