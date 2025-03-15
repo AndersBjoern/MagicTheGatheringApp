@@ -311,13 +311,43 @@ function addInnerContent(playerName, rotationClass) {
 }
 
 export function randomPlayer() {
-  const gridItems = document.querySelectorAll(".grid-item");
+  const gridItems = Array.from(document.querySelectorAll(".grid-item"));
+  if (gridItems.length === 0) return;
+
+  const minLoops = 15;
+  const maxLoops = 20;
+  const totalLoops =
+    Math.floor(Math.random() * (maxLoops - minLoops + 1)) + minLoops;
+
   const randomIndex = Math.floor(Math.random() * gridItems.length);
-  const randomGridItem = gridItems[randomIndex];
+  let currentIndex = randomIndex;
+  let step = 0;
 
-  randomGridItem.classList.add("celebration");
+  function highlightNext() {
+    if (step > 0) {
+      gridItems[
+        (currentIndex - 1 + gridItems.length) % gridItems.length
+      ].style.backgroundColor = "";
+    }
+    gridItems[currentIndex].style.backgroundColor = "rgba(255, 255, 255, 0.96)";
 
-  setTimeout(() => {
-    randomGridItem.classList.remove("celebration");
-  }, 2000);
+    if (step < totalLoops) {
+      setTimeout(() => {
+        gridItems[currentIndex].style.backgroundColor = "";
+        currentIndex = (currentIndex + 1) % gridItems.length;
+        step++;
+        highlightNext();
+      }, 200);
+    } else {
+      setTimeout(() => {
+        gridItems[currentIndex].classList.add("celebration");
+        setTimeout(() => {
+          gridItems[currentIndex].classList.remove("celebration");
+          gridItems[currentIndex].style.backgroundColor = "";
+        }, 4000);
+      }, 0);
+    }
+  }
+
+  highlightNext();
 }

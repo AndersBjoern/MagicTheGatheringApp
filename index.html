@@ -13,13 +13,12 @@
   </head>
   <body>
     <div id="wrapper">
-      <!-- Menu-knap -->
       <button id="menu-toggle" onclick="toggleNavbar()">☰</button>
 
-      <!-- Navbar -->
       <nav id="navbar">
         <button onclick="navigateTo('home')">Home</button>
       </nav>
+      <div id="overlay"></div>
 
       <div id="content"></div>
     </div>
@@ -38,15 +37,45 @@
       window.toggleNavbar = function () {
         const navbar = document.getElementById("navbar");
         const menuToggle = document.getElementById("menu-toggle");
+        const overlay = document.getElementById("overlay");
 
-        navbar.classList.toggle("active");
+        const isActive = navbar.classList.contains("active");
 
-        if (navbar.classList.contains("active")) {
-          menuToggle.textContent = "✖";
+        if (isActive) {
+          closeNavbar();
         } else {
-          menuToggle.textContent = "☰";
+          navbar.classList.add("active");
+          overlay.style.display = "block";
+          menuToggle.textContent = "✖";
+          document.addEventListener("click", closeNavbarOnClickOutside);
         }
       };
+
+      function closeNavbar() {
+        const navbar = document.getElementById("navbar");
+        const menuToggle = document.getElementById("menu-toggle");
+        const overlay = document.getElementById("overlay");
+
+        navbar.classList.remove("active");
+        overlay.style.display = "none";
+        menuToggle.textContent = "☰";
+        document.removeEventListener("click", closeNavbarOnClickOutside);
+      }
+
+      function closeNavbarOnClickOutside(event) {
+        const navbar = document.getElementById("navbar");
+        const menuToggle = document.getElementById("menu-toggle");
+        const overlay = document.getElementById("overlay");
+
+        if (!navbar.contains(event.target) && event.target !== menuToggle) {
+          closeNavbar();
+        } else if (
+          event.target.tagName === "BUTTON" &&
+          navbar.contains(event.target)
+        ) {
+          closeNavbar();
+        }
+      }
 
       gameManager.loadPage("home");
     </script>

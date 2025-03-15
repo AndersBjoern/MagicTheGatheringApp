@@ -53,34 +53,32 @@ export const gameManager = {
 
   updateNavbar: function (page) {
     const navbar = document.getElementById("navbar");
-    let extraButtons = document.getElementById("extra-buttons");
+    const existingButtons = navbar.querySelectorAll(".extra-button");
 
-    if (!extraButtons) {
-      extraButtons = document.createElement("div");
-      extraButtons.id = "extra-buttons";
-      navbar.appendChild(extraButtons);
-    }
+    existingButtons.forEach((button) => button.remove());
 
     if (page === "game") {
-      extraButtons.innerHTML = `
-        <button id="restart-game-button">Genstart spil</button>
-        <button id="select-player-button" class="highlight-button">Vælg spiller</button>
-      `;
+      const restartButton = document.createElement("button");
+      restartButton.id = "restart-game-button";
+      restartButton.classList.add("extra-button");
+      restartButton.textContent = "Genstart spil";
+      restartButton.addEventListener("click", () => this.restartGame());
 
-      document
-        .getElementById("restart-game-button")
-        .addEventListener("click", () => this.restartGame());
-      document
-        .getElementById("select-player-button")
-        .addEventListener("click", () => this.selectPlayer());
-    } else {
-      extraButtons.innerHTML = "";
+      const selectPlayerButton = document.createElement("button");
+      selectPlayerButton.id = "select-player-button";
+      selectPlayerButton.classList.add("extra-button", "highlight-button");
+      selectPlayerButton.textContent = "Vælg spiller";
+      selectPlayerButton.addEventListener("click", () => this.selectPlayer());
+
+      navbar.appendChild(restartButton);
+      navbar.appendChild(selectPlayerButton);
     }
   },
 
   restartGame: function () {
     this.loadPage("game", this.numberOfPlayers);
   },
+
   selectPlayer: function () {
     this.gameModule.randomPlayer();
   },
