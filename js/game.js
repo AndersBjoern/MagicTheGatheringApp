@@ -296,7 +296,7 @@ export function adjustContentWrapperSize() {
 
 function addInnerContent(playerName, rotationClass) {
   return `
-    <div class="content-wrapper ${rotationClass}">
+    <div class="content-wrapper ${rotationClass}" data-default-rotation="${rotationClass}">
     <div class="heart-icon">❤️</div>  
     <div class="content-container">
       <div class="original-value"></div>

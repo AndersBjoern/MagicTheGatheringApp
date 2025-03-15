@@ -1,3 +1,5 @@
+import { soundManager } from "../js/soundManager.js";
+
 export const gameManager = {
   currentPage: null,
   numberOfPlayers: 0,
@@ -73,6 +75,21 @@ export const gameManager = {
       navbar.appendChild(restartButton);
       navbar.appendChild(selectPlayerButton);
     }
+
+    let muteButton = document.getElementById("mute-button");
+
+    if (!muteButton) {
+      muteButton = document.createElement("button");
+      muteButton.id = "mute-button";
+      muteButton.textContent = soundManager.isMuted ? "🔇" : "🔊";
+      navbar.appendChild(muteButton);
+    }
+
+    muteButton.onclick = () => {
+      const newMuteState = !soundManager.isMuted;
+      soundManager.muteAll(newMuteState);
+      muteButton.textContent = newMuteState ? "🔇" : "🔊";
+    };
   },
 
   restartGame: function () {

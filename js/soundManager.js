@@ -1,26 +1,31 @@
 class SoundManager {
   constructor() {
     this.sounds = {};
-    this.currentlyPlaying = null;
+    this.isMuted = false;
   }
 
   playSound(soundFile) {
-    if (this.currentlyPlaying && this.currentlyPlaying !== soundFile) {
-      this.sounds[this.currentlyPlaying].pause();
-      this.sounds[this.currentlyPlaying].currentTime = 0;
-    }
+    if (this.isMuted) return;
 
-    if (this.sounds[soundFile] && this.sounds[soundFile].paused === false) {
+    if (this.sounds[soundFile] && !this.sounds[soundFile].paused) {
       return;
     }
 
-    const audio =
-      this.sounds[soundFile] || new Audio(`./audio/${soundFile}.mp3`);
-    audio.currentTime = 0;
-    audio.play();
+    if (!this.sounds[soundFile]) {
+      this.sounds[soundFile] = new Audio(`./audio/${soundFile}.mp3`);
+    }
 
-    this.sounds[soundFile] = audio;
-    this.currentlyPlaying = soundFile;
+    this.sounds[soundFile].currentTime = 0;
+    this.sounds[soundFile].play();
+  }
+
+  muteAll(isMuted) {
+    this.isMuted = isMuted;
+    for (const sound in this.sounds) {
+      if (this.sounds.hasOwnProperty(sound)) {
+        this.sounds[sound].muted = isMuted;
+      }
+    }
   }
 }
 
