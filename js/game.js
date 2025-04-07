@@ -51,16 +51,17 @@ export function changeNumber(numberElement, delta, cell) {
     const minFontSize = 15;
     const maxFontSize = 30;
 
-    if (value >= maxValue) return `${maxFontSize}vw`;
-    if (value <= minValue) return `${minFontSize}vw`;
+    const isLandscape = window.innerWidth > window.innerHeight;
+    const unit = isLandscape ? "vh" : "vw";
+
+    if (value >= maxValue) return `${maxFontSize}${unit}`;
+    if (value <= minValue) return `${minFontSize}${unit}`;
 
     let percentage = (value - minValue) / (maxValue - minValue);
-
     let fontSize = minFontSize + percentage * (maxFontSize - minFontSize);
-
     fontSize = Math.ceil(fontSize * 10) / 10;
 
-    return `${fontSize}vw`;
+    return `${fontSize}${unit}`;
   }
 
   function setHeartBeatSpeed(value, heartIcon) {
