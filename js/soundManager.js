@@ -15,6 +15,13 @@ class SoundManager {
   async playSound(soundFile) {
     if (this.isMuted) return;
 
+    this.sounds ??= {};
+    this.activeSources ??= {};
+
+    if (this.activeSources[soundFile]) {
+      return;
+    }
+
     if (!this.sounds[soundFile]) {
       const response = await fetch(`./audio/${soundFile}.mp3`);
       const arrayBuffer = await response.arrayBuffer();
@@ -27,20 +34,11 @@ class SoundManager {
     source.buffer = this.sounds[soundFile];
     source.connect(this.audioContext.destination);
     source.start();
-  }
 
-  async playSoundWithInterrupt(soundFile) {
-    if (this.isMuted) return;
+    this.activeSources[soundFile] = source;
 
-    if (!this.mediaElement) {
-      this.mediaElement = new Audio();
-    }
-    this.mediaElement.src = `./audio/${soundFile}.mp3`;
-    this.mediaElement.load();
-    this.mediaElement.play();
-
-    this.mediaElement.onended = () => {
-      this.mediaElement = null;
+    source.onended = () => {
+      delete this.activeSources[soundFile];
     };
   }
 
