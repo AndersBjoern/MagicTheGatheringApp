@@ -5,6 +5,11 @@ class SoundManager {
     this.sounds = {};
     this.isMuted = false;
     this.mediaElement = null;
+    window.addEventListener("click", () => {
+      if (this.audioContext.state === "suspended") {
+        this.audioContext.resume();
+      }
+    });
   }
 
   async playSound(soundFile) {
