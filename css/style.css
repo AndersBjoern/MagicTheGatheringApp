@@ -207,6 +207,57 @@ body {
   position: absolute;
 }
 
+.top-nav {
+  width: 100%;
+  background-color: #4b46461d;
+  padding: 5px;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  font-size: 20px;
+}
+
+.top-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.top-nav i {
+  color: #ffffff43;
+}
+
+.top-nav .fa-circle {
+  color: #cecece;
+  font-size: 26px;
+}
+
+.phase-active i {
+  color: white;
+}
+
+.top-nav.expanded {
+  padding: 40px;
+  background-color: #4b4646c9;
+  font-size: 1em;
+}
+
+.search-container {
+  margin-top: 20px;
+}
+
+.search-container input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
 .heart-icon {
   position: absolute;
   text-align: center;
@@ -307,6 +358,9 @@ body {
   margin-right: -1em;
 }
 
+.normal {
+  transform: rotate(0deg);
+}
 .rotate-90 {
   transform: rotate(90deg);
 }

@@ -150,127 +150,303 @@ export function resetTimer(cell) {
 
 export function createGameboard(playerCount) {
   const boardContainer = document.getElementById("gridContainer");
-  boardContainer.innerHTML = "";
-  boardContainer.style.gridTemplateColumns = "1fr 1fr";
+  resetGrid(boardContainer);
 
-  if (playerCount === 2) {
-    boardContainer.style.gridTemplateColumns = "1fr";
-    boardContainer.style.gridTemplateRows = "1fr 1fr";
-    boardContainer.innerHTML = `
-        <div class="grid-item player1">${addInnerContent(
-          "P1",
-          "rotate-180"
-        )}</div>
-      <div class="grid-item player2">${addInnerContent("P2", "")}</div>
-    `;
-  }
+  const layout = getGridLayout(playerCount);
+  applyGridLayout(boardContainer, layout);
 
-  if (playerCount === 3) {
-    boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
-    boardContainer.innerHTML = `
-        <div class="grid-item player1" style="grid-row: span 2;">${addInnerContent(
-          "P1",
-          "rotate-90"
-        )}</div>
-      <div class="grid-item player2" style="grid-row: span 2;">${addInnerContent(
-        "P2",
-        "rotate--90"
-      )}</div>
-      <div class="grid-item player3" style="grid-column: span 2;">${addInnerContent(
-        "P3",
-        ""
-      )}</div>
-    `;
-  }
+  boardContainer.innerHTML = layout.html;
 
-  if (playerCount === 4) {
-    boardContainer.style.gridTemplateRows = "1fr 1fr";
-    boardContainer.innerHTML = `
-        <div class="grid-item player1">${addInnerContent(
-          "P1",
-          "rotate-90"
-        )}</div>
-      <div class="grid-item player2">${addInnerContent(
-        "P2",
-        "rotate--90"
-      )}</div>
-      <div class="grid-item player3">${addInnerContent("P3", "rotate-90")}</div>
-      <div class="grid-item player4">${addInnerContent(
-        "P4",
-        "rotate--90"
-      )}</div>
-    `;
-  }
-
-  if (playerCount === 5) {
-    boardContainer.style.gridTemplateColumns = "1fr 1fr";
-    boardContainer.style.gridTemplateRows = "1.5fr 1.5fr 1fr";
-    boardContainer.innerHTML = `
-        <div class="grid-item player1">${addInnerContent(
-          "P1",
-          "rotate-90"
-        )}</div>
-      <div class="grid-item player2">${addInnerContent(
-        "P2",
-        "rotate--90"
-      )}</div>
-      <div class="grid-item player3">${addInnerContent("P3", "rotate-90")}</div>
-      <div class="grid-item player4">${addInnerContent(
-        "P4",
-        "rotate--90"
-      )}</div>
-      <div class="grid-item player5" style="grid-column: span 2; grid-row: span 2;">${addInnerContent(
-        "P5",
-        ""
-      )}</div>
-    `;
-  }
-
-  if (playerCount === 6) {
-    boardContainer.style.gridTemplateRows = "1fr 1fr 1fr";
-    boardContainer.innerHTML = `
-        <div class="grid-item player1">${addInnerContent(
-          "P1",
-          "rotate-90"
-        )}</div>
-        <div class="grid-item player2">${addInnerContent(
-          "P2",
-          "rotate--90"
-        )}</div>
-        <div class="grid-item player3">${addInnerContent(
-          "P3",
-          "rotate-90"
-        )}</div>
-        <div class="grid-item player4">${addInnerContent(
-          "P4",
-          "rotate--90"
-        )}</div>
-        <div class="grid-item player5">${addInnerContent(
-          "P5",
-          "rotate-90"
-        )}</div>
-        <div class="grid-item player6">${addInnerContent(
-          "P6",
-          "rotate--90"
-        )}</div>
-      `;
-  }
-
-  document.querySelectorAll(".grid-item").forEach((cell) => {
-    const numberElement = cell.querySelector(".number-display");
-    const leftButton = cell.querySelector(".left-button");
-    const rightButton = cell.querySelector(".right-button");
-
-    leftButton.addEventListener("click", () =>
-      changeNumber(numberElement, -1, cell)
-    );
-    rightButton.addEventListener("click", () =>
-      changeNumber(numberElement, 1, cell)
-    );
-  });
+  setupHoldListeners();
+  setupTopNavToggle(boardContainer);
 
   adjustContentWrapperSize();
   window.addEventListener("resize", adjustContentWrapperSize);
+}
+
+export function resetGrid(container) {
+  container.innerHTML = "";
+  container.style.gridTemplateColumns = "1fr 1fr";
+  container.style.gridTemplateRows = "";
+}
+
+export function getGridLayout(playerCount) {
+  switch (playerCount) {
+    case 2:
+      return {
+        html: `
+          <div class="grid-item player1">${addInnerContent(
+            "P1",
+            "rotate-180"
+          )}</div>
+          <div class="grid-item player2">${addInnerContent("P2", "")}</div>
+        `,
+        style: { columns: "1fr", rows: "1fr 1fr" },
+      };
+    case 3:
+      return {
+        html: `
+          <div class="grid-item player1" style="grid-row: span 2;">${addInnerContent(
+            "P1",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player2" style="grid-row: span 2;">${addInnerContent(
+            "P2",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player3" style="grid-column: span 2;">${addInnerContent(
+            "P3",
+            "normal"
+          )}</div>
+        `,
+        style: { columns: "1fr 1fr", rows: "1fr 1fr 1fr" },
+      };
+    case 4:
+      return {
+        html: `
+          <div class="grid-item player1">${addInnerContent(
+            "P1",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player2">${addInnerContent(
+            "P2",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player3">${addInnerContent(
+            "P3",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player4">${addInnerContent(
+            "P4",
+            "rotate--90"
+          )}</div>
+        `,
+        style: { columns: "1fr 1fr", rows: "1fr 1fr" },
+      };
+    case 5:
+      return {
+        html: `
+          <div class="grid-item player1">${addInnerContent(
+            "P1",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player2">${addInnerContent(
+            "P2",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player3">${addInnerContent(
+            "P3",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player4">${addInnerContent(
+            "P4",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player5" style="grid-column: span 2; grid-row: span 2;">${addInnerContent(
+            "P5",
+            "normal"
+          )}</div>
+        `,
+        style: { columns: "1fr 1fr", rows: "1.5fr 1.5fr 1fr" },
+      };
+    case 6:
+      return {
+        html: `
+          <div class="grid-item player1">${addInnerContent(
+            "P1",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player2">${addInnerContent(
+            "P2",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player3">${addInnerContent(
+            "P3",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player4">${addInnerContent(
+            "P4",
+            "rotate--90"
+          )}</div>
+          <div class="grid-item player5">${addInnerContent(
+            "P5",
+            "rotate-90"
+          )}</div>
+          <div class="grid-item player6">${addInnerContent(
+            "P6",
+            "rotate--90"
+          )}</div>
+        `,
+        style: { columns: "1fr 1fr", rows: "1fr 1fr 1fr" },
+      };
+    default:
+      return { html: "", style: { columns: "1fr", rows: "1fr" } };
+  }
+}
+
+export function applyGridLayout(container, layout) {
+  container.style.gridTemplateColumns = layout.style.columns;
+  container.style.gridTemplateRows = layout.style.rows;
+}
+
+export function setupHoldListeners() {
+  document.querySelectorAll(".grid-item").forEach((cell) => {
+    setupHealthButtons(cell);
+    setupPhaseButtons(cell);
+  });
+}
+
+function setupHealthButtons(cell) {
+  const numberElement = cell.querySelector(".number-display");
+  const leftButton = cell.querySelector(".left-button");
+  const rightButton = cell.querySelector(".right-button");
+  const holdTimers = new Map();
+
+  function handleHoldStart(button, delta) {
+    const timerId = setTimeout(() => {
+      changeNumber(numberElement, delta * 10, cell);
+      holdTimers.delete(button);
+    }, 2000);
+    holdTimers.set(button, timerId);
+  }
+
+  function handleHoldEnd(button, delta) {
+    if (holdTimers.has(button)) {
+      clearTimeout(holdTimers.get(button));
+      holdTimers.delete(button);
+      changeNumber(numberElement, delta, cell);
+    }
+  }
+
+  leftButton.replaceWith(leftButton.cloneNode(true));
+  rightButton.replaceWith(rightButton.cloneNode(true));
+
+  const newLeftButton = cell.querySelector(".left-button");
+  const newRightButton = cell.querySelector(".right-button");
+
+  addHoldEvents(newLeftButton, -1);
+  addHoldEvents(newRightButton, 1);
+
+  function addHoldEvents(button, delta) {
+    button.addEventListener("mousedown", () => handleHoldStart(button, delta));
+    button.addEventListener("mouseup", () => handleHoldEnd(button, delta));
+    button.addEventListener("mouseleave", () => handleHoldEnd(button, delta));
+    button.addEventListener("touchstart", () => handleHoldStart(button, delta));
+    button.addEventListener("touchend", () => handleHoldEnd(button, delta));
+    button.addEventListener("touchcancel", () => handleHoldEnd(button, delta));
+  }
+}
+
+function setupPhaseButtons(cell) {
+  const navButtons = cell.querySelectorAll(".top-nav .phase-btn");
+
+  navButtons.forEach((btn) => {
+    const phase = btn.dataset.phase;
+    if (phase === "start") return;
+
+    let pressTimer = null;
+
+    const startPress = () => {
+      const topNav = btn.closest(".top-nav");
+      if (!topNav.classList.contains("expanded")) return;
+
+      pressTimer = setTimeout(() => {
+        btn.classList.toggle("phase-active");
+      }, 1000);
+    };
+
+    const cancelPress = () => {
+      clearTimeout(pressTimer);
+    };
+
+    btn.addEventListener("mousedown", startPress);
+    btn.addEventListener("mouseup", cancelPress);
+    btn.addEventListener("mouseleave", cancelPress);
+    btn.addEventListener("touchstart", startPress);
+    btn.addEventListener("touchend", cancelPress);
+    btn.addEventListener("touchcancel", cancelPress);
+  });
+}
+
+export function setupTopNavToggle(boardContainer) {
+  boardContainer.addEventListener("click", (event) => {
+    const circleIcon = event.target.closest("i.fa-circle");
+    if (circleIcon) {
+      const topNav = circleIcon.closest(".top-nav");
+      topNav.classList.toggle("expanded");
+
+      if (!topNav.querySelector(".search-container")) {
+        addSearchUI(topNav);
+      } else if (!topNav.classList.contains("expanded")) {
+        removeSearchUI(topNav);
+      }
+
+      return;
+    }
+
+    const searchBtn = event.target.closest(".search-btn");
+    if (searchBtn) {
+      const topNav = searchBtn.closest(".top-nav");
+      const input = topNav.querySelector("input");
+      const cardName = input.value.trim();
+      const playerEl = searchBtn.closest(".grid-item");
+
+      if (!cardName) return;
+
+      fetchCardImage(cardName)
+        .then((imageUrl) => {
+          if (imageUrl) {
+            playerEl.style.backgroundImage = `url(${imageUrl})`;
+            playerEl.style.backgroundSize = "cover";
+            playerEl.style.backgroundPosition = "center";
+          } else {
+            console.log("Billede ikke fundet.");
+          }
+        })
+        .catch((err) => {
+          console.error("Fejl ved søgning:", err);
+        });
+
+      removeSearchUI(topNav);
+    }
+  });
+}
+
+function addSearchUI(navEl) {
+  const searchContainer = document.createElement("div");
+  searchContainer.className = "search-container";
+  searchContainer.innerHTML = `
+    <input type="text" placeholder="Søg MTG-kort..." />
+    <button class="search-btn">Søg</button>
+  `;
+  navEl.appendChild(searchContainer);
+}
+
+function removeSearchUI(navEl) {
+  navEl.classList.remove("expanded");
+  const searchContainer = navEl.querySelector(".search-container");
+  if (searchContainer) searchContainer.remove();
+}
+
+async function fetchCardImage(cardName) {
+  try {
+    const response = await fetch(
+      `https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(
+        cardName
+      )}`,
+      {
+        headers: { Accept: "application/json" },
+      }
+    );
+
+    if (!response.ok) throw new Error("Kort ikke fundet");
+
+    const card = await response.json();
+    return card.image_uris?.art_crop || null;
+  } catch (err) {
+    console.error("Søgning fejlede:", err);
+    return null;
+  }
 }
 
 export function adjustContentWrapperSize() {
@@ -297,17 +473,30 @@ export function adjustContentWrapperSize() {
 
 function addInnerContent(playerName, rotationClass) {
   return `
-    <div class="content-wrapper ${rotationClass}" data-default-rotation="${rotationClass}">
-    <div class="heart-icon">❤️</div>  
-    <div class="content-container">
-      <div class="original-value"></div>
-        <div class="number-display">40</div>
-        <div class="button-container">
-          <div class="left-button">-</div>
-          <div class="right-button">+</div>
+    <div class="content-wrapper ${rotationClass}" data-player="${playerName}" data-default-rotation="${rotationClass}">
+      <nav class="top-nav">
+        <ul>
+          <li><a href="#" class="phase-btn" data-phase="start" title="Start Phase"><i class="fa-regular fa-circle"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="untap" title="Untap"><i class="fa-solid fa-rotate-left"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="upkeep" title="Upkeep"><i class="fa-solid fa-hourglass-half"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="draw" title="Draw"><i class="fa-solid fa-file-import"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="main" title="Main"><i class="fa-solid fa-play"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="combat" title="Combat"><i class="fa-solid fa-fist-raised"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="second-main" title="Second Main"><i class="fa-solid fa-play-circle"></i></a></li>
+          <li><a href="#" class="phase-btn" data-phase="endstep" title="Endstep"><i class="fa-solid fa-flag-checkered"></i></a></li>
+        </ul>
+      </nav>  
+      <div class="heart-icon">❤️</div>  
+        <div class="content-container">
+          <div class="original-value"></div>
+            <div class="number-display">40</div>
+            <div class="button-container">
+              <div class="left-button">-</div>
+              <div class="right-button">+</div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>  
+    </div>
   `;
 }
 
