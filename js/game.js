@@ -322,17 +322,16 @@ function setupHealthButtons(cell) {
       pressTimer = setTimeout(() => {
         changeNumber(numberElement, delta * 10, cell);
         longPressTriggered = true;
-      }, 1000); // 1 sekund long press
+      }, 1000);
     };
 
     const end = () => {
       clearTimeout(pressTimer);
       if (!longPressTriggered) {
-        changeNumber(numberElement, delta, cell); // kort klik
+        changeNumber(numberElement, delta, cell);
       }
     };
 
-    // Brug pointer events for bedre kompatibilitet med både mus og touch
     button.addEventListener("pointerdown", start);
     button.addEventListener("pointerup", end);
     button.addEventListener("pointerleave", end);
@@ -347,27 +346,9 @@ function setupPhaseButtons(cell) {
     const phase = btn.dataset.phase;
     if (phase === "start") return;
 
-    let pressTimer = null;
-
-    const startPress = () => {
-      const topNav = btn.closest(".top-nav");
-      if (!topNav.classList.contains("expanded")) return;
-
-      pressTimer = setTimeout(() => {
-        btn.classList.toggle("phase-active");
-      }, 1000);
-    };
-
-    const cancelPress = () => {
-      clearTimeout(pressTimer);
-    };
-
-    btn.addEventListener("mousedown", startPress);
-    btn.addEventListener("mouseup", cancelPress);
-    btn.addEventListener("mouseleave", cancelPress);
-    btn.addEventListener("touchstart", startPress);
-    btn.addEventListener("touchend", cancelPress);
-    btn.addEventListener("touchcancel", cancelPress);
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("phase-active");
+    });
   });
 }
 

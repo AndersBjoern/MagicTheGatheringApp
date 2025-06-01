@@ -212,7 +212,6 @@ body {
 
 .top-nav {
   width: 100%;
-  background-color: #4b46461d;
   padding: 5px;
   z-index: 999;
   position: fixed;
@@ -228,7 +227,7 @@ body {
 }
 
 .top-nav i {
-  color: #ffffff43;
+  color: #ffffff28;
 }
 
 .top-nav .fa-circle {
