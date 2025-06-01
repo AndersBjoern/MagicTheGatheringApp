@@ -300,23 +300,6 @@ function setupHealthButtons(cell) {
   const numberElement = cell.querySelector(".number-display");
   const leftButton = cell.querySelector(".left-button");
   const rightButton = cell.querySelector(".right-button");
-  const holdTimers = new Map();
-
-  function handleHoldStart(button, delta) {
-    const timerId = setTimeout(() => {
-      changeNumber(numberElement, delta * 10, cell);
-      holdTimers.delete(button);
-    }, 2000);
-    holdTimers.set(button, timerId);
-  }
-
-  function handleHoldEnd(button, delta) {
-    if (holdTimers.has(button)) {
-      clearTimeout(holdTimers.get(button));
-      holdTimers.delete(button);
-      changeNumber(numberElement, delta, cell);
-    }
-  }
 
   leftButton.replaceWith(leftButton.cloneNode(true));
   rightButton.replaceWith(rightButton.cloneNode(true));
@@ -324,16 +307,33 @@ function setupHealthButtons(cell) {
   const newLeftButton = cell.querySelector(".left-button");
   const newRightButton = cell.querySelector(".right-button");
 
-  addHoldEvents(newLeftButton, -1);
-  addHoldEvents(newRightButton, 1);
+  addUnifiedHoldHandler(newLeftButton, -1);
+  addUnifiedHoldHandler(newRightButton, 1);
 
-  function addHoldEvents(button, delta) {
-    button.addEventListener("mousedown", () => handleHoldStart(button, delta));
-    button.addEventListener("mouseup", () => handleHoldEnd(button, delta));
-    button.addEventListener("mouseleave", () => handleHoldEnd(button, delta));
-    button.addEventListener("touchstart", () => handleHoldStart(button, delta));
-    button.addEventListener("touchend", () => handleHoldEnd(button, delta));
-    button.addEventListener("touchcancel", () => handleHoldEnd(button, delta));
+  function addUnifiedHoldHandler(button, delta) {
+    let pressTimer = null;
+    let longPressTriggered = false;
+
+    const start = () => {
+      longPressTriggered = false;
+      pressTimer = setTimeout(() => {
+        changeNumber(numberElement, delta * 10, cell);
+        longPressTriggered = true;
+      }, 1000); // 1 sekund long press
+    };
+
+    const end = () => {
+      clearTimeout(pressTimer);
+      if (!longPressTriggered) {
+        changeNumber(numberElement, delta, cell); // kort klik
+      }
+    };
+
+    // Brug pointer events for bedre kompatibilitet med både mus og touch
+    button.addEventListener("pointerdown", start);
+    button.addEventListener("pointerup", end);
+    button.addEventListener("pointerleave", end);
+    button.addEventListener("pointercancel", end);
   }
 }
 
@@ -476,16 +476,17 @@ function addInnerContent(playerName, rotationClass) {
     <div class="content-wrapper ${rotationClass}" data-player="${playerName}" data-default-rotation="${rotationClass}">
       <nav class="top-nav">
         <ul>
-          <li><a href="#" class="phase-btn" data-phase="start" title="Start Phase"><i class="fa-regular fa-circle"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="untap" title="Untap"><i class="fa-solid fa-rotate-left"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="upkeep" title="Upkeep"><i class="fa-solid fa-hourglass-half"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="draw" title="Draw"><i class="fa-solid fa-file-import"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="main" title="Main"><i class="fa-solid fa-play"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="combat" title="Combat"><i class="fa-solid fa-fist-raised"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="second-main" title="Second Main"><i class="fa-solid fa-play-circle"></i></a></li>
-          <li><a href="#" class="phase-btn" data-phase="endstep" title="Endstep"><i class="fa-solid fa-flag-checkered"></i></a></li>
+          <li><div class="phase-btn" data-phase="start" title="Start Phase"><i class="fa-regular fa-circle"></i></div></li>
+          <li><div class="phase-btn" data-phase="untap" title="Untap"><i class="fa-solid fa-rotate-left"></i></div></li>
+          <li><div class="phase-btn" data-phase="upkeep" title="Upkeep"><i class="fa-solid fa-hourglass-half"></i></div></li>
+          <li><div class="phase-btn" data-phase="draw" title="Draw"><i class="fa-solid fa-file-import"></i></div></li>
+          <li><div class="phase-btn" data-phase="main" title="Main"><i class="fa-solid fa-play"></i></div></li>
+          <li><div class="phase-btn" data-phase="combat" title="Combat"><i class="fa-solid fa-fist-raised"></i></div></li>
+          <li><div class="phase-btn" data-phase="second-main" title="Second Main"><i class="fa-solid fa-play-circle"></i></div></li>
+          <li><div class="phase-btn" data-phase="endstep" title="Endstep"><i class="fa-solid fa-flag-checkered"></i></div></li>
         </ul>
-      </nav>  
+      </nav>
+
       <div class="heart-icon">❤️</div>  
         <div class="content-container">
           <div class="original-value"></div>
