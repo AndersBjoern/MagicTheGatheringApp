@@ -179,7 +179,10 @@ export function getGridLayout(playerCount) {
             "P1",
             "rotate-180"
           )}</div>
-          <div class="grid-item player2">${addInnerContent("P2", "")}</div>
+          <div class="grid-item player2">${addInnerContent(
+            "P2",
+            "normal"
+          )}</div>
         `,
         style: { columns: "1fr", rows: "1fr 1fr" },
       };
