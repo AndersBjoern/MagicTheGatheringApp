@@ -316,9 +316,11 @@ function setupHealthButtons(cell) {
   function addUnifiedHoldHandler(button, delta) {
     let pressTimer = null;
     let longPressTriggered = false;
+    let ended = false;
 
     const start = () => {
       longPressTriggered = false;
+      ended = false;
       pressTimer = setTimeout(() => {
         changeNumber(numberElement, delta * 10, cell);
         longPressTriggered = true;
@@ -326,6 +328,8 @@ function setupHealthButtons(cell) {
     };
 
     const end = () => {
+      if (ended) return;
+      ended = true;
       clearTimeout(pressTimer);
       if (!longPressTriggered) {
         changeNumber(numberElement, delta, cell);
