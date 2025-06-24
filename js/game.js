@@ -1,68 +1,31 @@
 import { soundManager } from "../js/soundManager.js";
 
-export function changeNumber(numberElement, delta, cell) {
-  const originalValueDiv = cell.querySelector(".original-value");
+export function calculateFontSize(value) {
+  const minValue = 9;
+  const maxValue = 40;
+  const minFontSize = 15;
+  const maxFontSize = 30;
 
-  let currentNumber = parseInt(numberElement.textContent);
-  if (isNaN(currentNumber)) {
-    currentNumber = 0;
-  }
-  const oldNumber = currentNumber;
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const unit = isLandscape ? "vh" : "vw";
 
-  currentNumber += delta;
-  numberElement.textContent = currentNumber;
+  if (value >= maxValue) return `${maxFontSize}${unit}`;
+  if (value <= minValue) return `${minFontSize}${unit}`;
 
-  if (!originalValueDiv.textContent) {
-    originalValueDiv.textContent = oldNumber;
-    originalValueDiv.style.opacity = "1";
-  }
+  let percentage = (value - minValue) / (maxValue - minValue);
+  let fontSize = minFontSize + percentage * (maxFontSize - minFontSize);
+  fontSize = Math.ceil(fontSize * 10) / 10;
 
-  function playSoundEffects(currentNumber, oldNumber, cell) {
-    if (currentNumber < oldNumber) {
-      if (!cell.decreaseCount) {
-        cell.decreaseCount = 0;
-      }
+  return `${fontSize}${unit}`;
+}
 
-      cell.decreaseCount++;
-
-      if (cell.decreaseCount >= 5) {
-        soundManager.playSound("minecraft_hurt");
-        cell.decreaseCount = 0;
-      } else {
-        soundManager.playSound("point-drop");
-      }
-    } else {
-      soundManager.playSound("pot-of-greed");
-    }
-  }
-
-  function styleHeart(cell, value) {
-    const heartIcon = cell.querySelector(".heart-icon");
-    setHeartBeatSpeed(value, heartIcon);
-    const fontSize = calculateFontSize(value);
-    heartIcon.style.fontSize = fontSize;
-    setHeartDarkness(value, heartIcon);
-    updateHeartIcon(value, heartIcon);
-  }
-
-  function calculateFontSize(value) {
-    const minValue = 9;
-    const maxValue = 40;
-    const minFontSize = 15;
-    const maxFontSize = 30;
-
-    const isLandscape = window.innerWidth > window.innerHeight;
-    const unit = isLandscape ? "vh" : "vw";
-
-    if (value >= maxValue) return `${maxFontSize}${unit}`;
-    if (value <= minValue) return `${minFontSize}${unit}`;
-
-    let percentage = (value - minValue) / (maxValue - minValue);
-    let fontSize = minFontSize + percentage * (maxFontSize - minFontSize);
-    fontSize = Math.ceil(fontSize * 10) / 10;
-
-    return `${fontSize}${unit}`;
-  }
+export function styleHeart(cell, value) {
+  const heartIcon = cell.querySelector(".heart-icon");
+  setHeartBeatSpeed(value, heartIcon);
+  const fontSize = calculateFontSize(value);
+  heartIcon.style.fontSize = fontSize;
+  setHeartDarkness(value, heartIcon);
+  updateHeartIcon(value, heartIcon);
 
   function setHeartBeatSpeed(value, heartIcon) {
     const minValue = 10;
@@ -107,6 +70,54 @@ export function changeNumber(numberElement, delta, cell) {
       heartIcon.innerHTML = "💔";
     } else {
       heartIcon.innerHTML = "❤️";
+    }
+  }
+}
+
+export function changeNumber(numberElement, delta, cell) {
+  const originalValueDiv = cell.querySelector(".original-value");
+
+  let currentNumber = parseInt(numberElement.textContent);
+  if (isNaN(currentNumber)) {
+    currentNumber = 0;
+  }
+  const oldNumber = currentNumber;
+
+  currentNumber += delta;
+  numberElement.textContent = currentNumber;
+
+  if (!originalValueDiv.textContent) {
+    originalValueDiv.textContent = oldNumber;
+    originalValueDiv.style.opacity = "1";
+  }
+
+  function playSoundEffects(currentNumber, oldNumber, cell) {
+    if (currentNumber < oldNumber) {
+      if (!cell.decreaseCount) {
+        cell.decreaseCount = 0;
+      }
+      cell.decreaseCount++;
+      cell.increaseCount = 0;
+
+      if (cell.decreaseCount >= 5) {
+        soundManager.playSound("minecraft_hurt");
+        cell.decreaseCount = 0;
+      } else {
+        soundManager.playSound("point-drop");
+      }
+    } else if (currentNumber > oldNumber) {
+      if (!cell.increaseCount) {
+        cell.increaseCount = 0;
+      }
+      cell.increaseCount++;
+      cell.decreaseCount = 0;
+
+      if (cell.increaseCount >= 5) {
+        soundManager.playSound("pot-of-greed");
+        cell.increaseCount = 0;
+      } else {
+        soundManager.playSound("minecraft-drinking-sound-effect");
+      }
     }
   }
 
@@ -530,3 +541,12 @@ export function randomPlayer() {
 
   highlightNext();
 }
+
+window.addEventListener("resize", () => {
+  console.log("Resizing...");
+  document.querySelectorAll(".content-wrapper").forEach((cell) => {
+    const numberElement = cell.querySelector(".number-display");
+    const currentValue = parseInt(numberElement.textContent) || 0;
+    styleHeart(cell, currentValue);
+  });
+});
